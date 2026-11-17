@@ -1,0 +1,29 @@
+---
+import SectionHeading from './SectionHeading.astro';
+import { getLang, l, useTranslations } from '../i18n/utils';
+import { profile } from '../data/profile';
+
+const lang = getLang(Astro.currentLocale);
+const t = useTranslations(lang);
+---
+
+<section id="about" class="py-16 md:py-24">
+  <div class="container-page">
+    <SectionHeading kicker={t('about.kicker')} title={t('about.title')} />
+    <div class="grid gap-12 md:grid-cols-[1.4fr_1fr]">
+      <div class="reveal space-y-5 text-lg leading-relaxed text-pretty text-muted">
+        {profile.about.map((p) => <p>{l(p, lang)}</p>)}
+      </div>
+      <dl class="reveal grid grid-cols-3 gap-3 self-start md:grid-cols-1">
+        {
+          profile.highlights.map((h) => (
+            <div class="flex flex-col-reverse rounded-xl border border-border bg-surface p-4 md:p-5">
+              <dt class="mt-1 text-xs text-muted md:text-sm">{l(h.label, lang)}</dt>
+              <dd class="text-gradient text-2xl font-bold md:text-3xl">{h.value}</dd>
+            </div>
+          ))
+        }
+      </dl>
+    </div>
+  </div>
+</section>

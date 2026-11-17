@@ -1,0 +1,93 @@
+---
+import Icon from './Icon.astro';
+import SectionHeading from './SectionHeading.astro';
+import { getLang, l, useTranslations } from '../i18n/utils';
+import { certifications, education, languagesSpoken, softSkills } from '../data/resume';
+
+const lang = getLang(Astro.currentLocale);
+const t = useTranslations(lang);
+---
+
+<section id="education" class="py-16 md:py-24">
+  <div class="container-page">
+    <SectionHeading kicker={t('education.kicker')} title={t('education.title')} subtitle={t('education.subtitle')} />
+
+    <div class="grid gap-4 lg:grid-cols-2">
+      <!-- Educación -->
+      {
+        education.map((ed) => (
+          <article class="reveal rounded-2xl border border-border bg-surface p-6 md:p-7">
+            <div class="mb-4 flex items-center gap-3">
+              <span class="grid size-10 place-items-center rounded-lg bg-surface-2 text-accent">
+                <Icon name="graduation" size={20} />
+              </span>
+              <h3 class="text-sm font-medium text-muted">{t('education.degree')}</h3>
+            </div>
+            <p class="text-lg font-semibold tracking-tight">{l(ed.degree, lang)}</p>
+            <p class="mt-1 text-accent">{ed.school}</p>
+            <p class="mt-2 font-mono text-xs text-muted">{l(ed.period, lang)}</p>
+            {ed.note && <p class="mt-4 text-sm text-muted">{l(ed.note, lang)}</p>}
+          </article>
+        ))
+      }
+
+      <!-- Certificaciones -->
+      <article class="reveal rounded-2xl border border-border bg-surface p-6 md:p-7">
+        <div class="mb-4 flex items-center gap-3">
+          <span class="grid size-10 place-items-center rounded-lg bg-surface-2 text-accent">
+            <Icon name="award" size={20} />
+          </span>
+          <h3 class="text-sm font-medium text-muted">{t('education.certs')}</h3>
+        </div>
+        <ul class="space-y-3">
+          {
+            certifications.map((c) => (
+              <li class="flex flex-wrap items-center gap-x-3 gap-y-1">
+                <span class="size-1.5 shrink-0 rounded-full bg-accent/70" />
+                <span class="font-medium">{l(c.name, lang)}</span>
+                {c.status && (
+                  <span class="rounded-full border border-amber-500/30 bg-amber-500/10 px-2 py-0.5 text-xs font-medium text-amber-600 dark:text-amber-400">
+                    {l(c.status, lang)}
+                  </span>
+                )}
+              </li>
+            ))
+          }
+        </ul>
+      </article>
+
+      <!-- Idiomas -->
+      <article class="reveal rounded-2xl border border-border bg-surface p-6 md:p-7">
+        <div class="mb-4 flex items-center gap-3">
+          <span class="grid size-10 place-items-center rounded-lg bg-surface-2 text-accent">
+            <Icon name="languages" size={20} />
+          </span>
+          <h3 class="text-sm font-medium text-muted">{t('education.languages')}</h3>
+        </div>
+        <dl class="grid grid-cols-2 gap-3">
+          {
+            languagesSpoken.map((lng) => (
+              <div class="flex flex-col-reverse rounded-xl bg-surface-2 p-4">
+                <dt class="mt-1 text-sm text-muted">{l(lng.name, lang)}</dt>
+                <dd class="text-gradient text-xl font-bold">{l(lng.level, lang)}</dd>
+              </div>
+            ))
+          }
+        </dl>
+      </article>
+
+      <!-- Competencias -->
+      <article class="reveal rounded-2xl border border-border bg-surface p-6 md:p-7">
+        <div class="mb-4 flex items-center gap-3">
+          <span class="grid size-10 place-items-center rounded-lg bg-surface-2 text-accent">
+            <Icon name="users" size={20} />
+          </span>
+          <h3 class="text-sm font-medium text-muted">{t('education.soft')}</h3>
+        </div>
+        <ul class="flex flex-wrap gap-2">
+          {softSkills.map((s) => <li class="rounded-md border border-border bg-bg px-3 py-1.5 text-sm text-muted">{l(s, lang)}</li>)}
+        </ul>
+      </article>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,154 @@
+---
+import { getRelativeLocaleUrl } from 'astro:i18n';
+import Icon from './Icon.astro';
+import { getLang, useTranslations } from '../i18n/utils';
+import { profile } from '../data/profile';
+
+interface Props {
+  /** Ruta actual sin idioma ('' = inicio, 'cv' = página del CV). Se usa para el cambio de idioma. */
+  path?: string;
+}
+
+const { path = '' } = Astro.props;
+const lang = getLang(Astro.currentLocale);
+const t = useTranslations(lang);
+const otherLang = lang === 'es' ? 'en' : 'es';
+const home = getRelativeLocaleUrl(lang, '');
+const cvUrl = getRelativeLocaleUrl(lang, 'cv');
+const isHome = path === '';
+// En el inicio los anclas son relativas; en otras páginas apuntan al inicio
+const anchor = (id: string) => (isHome ? `#${id}` : `${home}#${id}`);
+
+const links = [
+  { href: anchor('about'), label: t('nav.about') },
+  { href: anchor('experience'), label: t('nav.experience') },
+  { href: anchor('skills'), label: t('nav.skills') },
+  { href: anchor('projects'), label: t('nav.projects') },
+  { href: anchor('contact'), label: t('nav.contact') },
+];
+---
+
+<header
+  id="site-header"
+  data-print-hide
+  class="fixed inset-x-0 top-0 z-50 border-b border-transparent transition-[background-color,border-color,backdrop-filter] duration-300 data-[scrolled]:border-border data-[scrolled]:bg-bg/75 data-[scrolled]:backdrop-blur-xl"
+>
+  <nav class="container-page flex h-16 items-center justify-between gap-4" aria-label={t('nav.label')}>
+    <a
+      href={home}
+      class="group flex items-center gap-2 font-mono text-sm font-semibold tracking-tight"
+      aria-label={profile.name}
+    >
+      <span
+        class="grid size-9 place-items-center rounded-lg border border-border bg-surface text-accent transition-colors group-hover:border-accent"
+      >
+        {profile.initials}
+      </span>
+    </a>
+
+    <ul class="hidden items-center gap-1 lg:flex">
+      {
+        links.map((link) => (
+          <li>
+            <a href={link.href} class="rounded-md px-3 py-2 text-sm text-muted transition-colors hover:text-text">
+              {link.label}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+
+    <div class="flex items-center gap-1">
+      <a
+        href={cvUrl}
+        class:list={[
+          'mr-1 hidden h-9 items-center gap-1.5 rounded-md border px-3 text-sm font-medium transition-colors sm:inline-flex',
+          path === 'cv' ? 'border-accent text-accent' : 'border-border text-text hover:border-accent',
+        ]}
+      >
+        <Icon name="fileText" size={15} />
+        {t('nav.cv')}
+      </a>
+      <a
+        href={getRelativeLocaleUrl(otherLang, path)}
+        hreflang={otherLang}
+        class="flex h-9 items-center gap-1.5 rounded-md px-2.5 font-mono text-xs font-medium text-muted uppercase transition-colors hover:text-text"
+        aria-label={t('lang.switch')}
+        title={t('lang.switch')}
+      >
+        <Icon name="globe" size={16} />
+        {otherLang}
+      </a>
+      <button
+        id="theme-toggle"
+        type="button"
+        class="grid size-9 place-items-center rounded-md text-muted transition-colors hover:text-text"
+        aria-label={t('theme.toggle')}
+        title={t('theme.toggle')}
+      >
+        <Icon name="sun" size={18} class="hidden dark:block" />
+        <Icon name="moon" size={18} class="block dark:hidden" />
+      </button>
+      <button
+        id="menu-toggle"
+        type="button"
+        class="grid size-9 place-items-center rounded-md text-muted transition-colors hover:text-text lg:hidden"
+        aria-label={t('nav.menu')}
+        aria-expanded="false"
+        aria-controls="mobile-menu"
+      >
+        <Icon name="menu" size={20} class="menu-open" />
+        <Icon name="close" size={20} class="menu-close hidden" />
+      </button>
+    </div>
+  </nav>
+
+  <div id="mobile-menu" class="hidden border-t border-border bg-bg/95 backdrop-blur-xl lg:hidden">
+    <ul class="container-page flex flex-col py-3">
+      {
+        links.map((link) => (
+          <li>
+            <a href={link.href} class="block rounded-md px-2 py-3 text-base text-muted hover:text-text">
+              {link.label}
+            </a>
+          </li>
+        ))
+      }
+      <li class="sm:hidden">
+        <a href={cvUrl} class="flex items-center gap-2 rounded-md px-2 py-3 text-base font-medium text-accent">
+          <Icon name="fileText" size={18} />
+          {t('nav.cv')}
+        </a>
+      </li>
+    </ul>
+  </div>
+</header>
+
+<script>
+  const header = document.getElementById('site-header')!;
+  const onScroll = () => header.toggleAttribute('data-scrolled', window.scrollY > 8);
+  onScroll();
+  window.addEventListener('scroll', onScroll, { passive: true });
+
+  // Tema claro/oscuro
+  document.getElementById('theme-toggle')?.addEventListener('click', () => {
+    const next = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
+    document.documentElement.dataset.theme = next;
+    try {
+      localStorage.setItem('theme', next);
+    } catch {}
+  });
+
+  // Menú móvil
+  const toggle = document.getElementById('menu-toggle')!;
+  const menu = document.getElementById('mobile-menu')!;
+  const setOpen = (open: boolean) => {
+    toggle.setAttribute('aria-expanded', String(open));
+    menu.classList.toggle('hidden', !open);
+    toggle.querySelector('.menu-open')?.classList.toggle('hidden', open);
+    toggle.querySelector('.menu-close')?.classList.toggle('hidden', !open);
+    header.toggleAttribute('data-scrolled', open || window.scrollY > 8);
+  };
+  toggle.addEventListener('click', () => setOpen(toggle.getAttribute('aria-expanded') !== 'true'));
+  menu.querySelectorAll('a').forEach((a) => a.addEventListener('click', () => setOpen(false)));
+</script>
