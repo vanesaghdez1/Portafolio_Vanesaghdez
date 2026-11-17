@@ -1,0 +1,87 @@
+---
+import Icon from './Icon.astro';
+import { getLang, useTranslations } from '../i18n/utils';
+import { profile } from '../data/profile';
+
+const lang = getLang(Astro.currentLocale);
+const t = useTranslations(lang);
+---
+
+<section id="contact" class="py-16 md:py-24">
+  <div class="container-page">
+    <div class="reveal relative overflow-hidden rounded-3xl border border-border bg-surface px-6 py-16 text-center md:px-16 md:py-20">
+      <div
+        class="pointer-events-none absolute inset-0 -z-0 opacity-60"
+        style="background: radial-gradient(ellipse 60% 70% at 50% 0%, var(--glow), transparent);"
+      >
+      </div>
+      <div class="relative">
+        <p class="font-mono text-sm text-accent">{t('contact.kicker')}. {t('nav.contact')}</p>
+        <h2 class="mx-auto mt-4 max-w-2xl text-3xl font-bold tracking-tight text-balance md:text-5xl">
+          {t('contact.title')}
+        </h2>
+        <p class="mx-auto mt-5 max-w-xl text-pretty text-muted">{t('contact.text')}</p>
+
+        <div class="mt-9 flex flex-wrap items-center justify-center gap-3">
+          <a
+            href={`mailto:${profile.email}`}
+            class="inline-flex items-center gap-2 rounded-lg bg-text px-6 py-3 text-sm font-semibold text-bg transition hover:opacity-90"
+          >
+            <Icon name="mail" size={16} />
+            {t('contact.cta')}
+          </a>
+          <button
+            type="button"
+            id="copy-email"
+            data-email={profile.email}
+            data-copied={t('contact.copied')}
+            class="inline-flex items-center gap-2 rounded-lg border border-border bg-bg px-5 py-3 font-mono text-sm transition hover:border-accent"
+          >
+            <Icon name="copy" size={15} class="copy-icon" />
+            <Icon name="check" size={15} class="check-icon hidden text-emerald-500" />
+            <span class="copy-label">{profile.email}</span>
+          </button>
+        </div>
+
+        <div class="mt-10 flex items-center justify-center gap-6 text-muted">
+          {
+            profile.socials.github && (
+              <a href={profile.socials.github} target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 text-sm transition hover:text-text">
+                <Icon name="github" size={18} /> GitHub
+              </a>
+            )
+          }
+          {
+            profile.socials.linkedin && (
+              <a href={profile.socials.linkedin} target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 text-sm transition hover:text-text">
+                <Icon name="linkedin" size={18} /> LinkedIn
+              </a>
+            )
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  const btn = document.getElementById('copy-email');
+  btn?.addEventListener('click', async () => {
+    const { email = '', copied = '' } = btn.dataset;
+    try {
+      await navigator.clipboard.writeText(email);
+    } catch {
+      window.location.href = `mailto:${email}`;
+      return;
+    }
+    const label = btn.querySelector('.copy-label')!;
+    btn.querySelector('.copy-icon')?.classList.add('hidden');
+    btn.querySelector('.check-icon')?.classList.remove('hidden');
+    label.textContent = copied;
+    setTimeout(() => {
+      label.textContent = email;
+      btn.querySelector('.copy-icon')?.classList.remove('hidden');
+      btn.querySelector('.check-icon')?.classList.add('hidden');
+    }, 1800);
+  });
+</script>

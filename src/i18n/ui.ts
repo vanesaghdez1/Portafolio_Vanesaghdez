@@ -1,0 +1,101 @@
+export const languages = {
+  es: 'Español',
+  en: 'English',
+} as const;
+
+export type Lang = keyof typeof languages;
+export const defaultLang: Lang = 'es';
+
+/** Texto en ambos idiomas. Úsalo en los archivos de /src/data. */
+export type Localized = Record<Lang, string>;
+
+export const ui = {
+  es: {
+    'meta.title': 'Vanesa — Full Stack Developer',
+    'meta.description':
+      'Portafolio de Vanesa, Full Stack Developer. Proyectos, stack tecnológico y contacto.',
+    'nav.about': 'Sobre mí',
+    'nav.skills': 'Stack',
+    'nav.projects': 'Proyectos',
+    'nav.contact': 'Contacto',
+    'nav.menu': 'Abrir menú',
+    'theme.toggle': 'Cambiar tema claro/oscuro',
+    'lang.switch': 'Cambiar idioma',
+    'hero.greeting': 'Hola, soy',
+    'hero.available': 'Disponible para nuevos proyectos',
+    'hero.cta.projects': 'Ver proyectos',
+    'hero.cta.contact': 'Contáctame',
+    'hero.cta.cv': 'Descargar CV',
+    'about.title': 'Sobre mí',
+    'about.kicker': '01',
+    'skills.title': 'Stack tecnológico',
+    'skills.kicker': '02',
+    'skills.subtitle': 'Herramientas con las que construyo de punta a punta.',
+    'projects.title': 'Proyectos',
+    'projects.kicker': '03',
+    'projects.subtitle': 'Una selección de lo que he construido.',
+    'projects.demo': 'Demo',
+    'projects.code': 'Código',
+    'projects.status.live': 'En producción',
+    'projects.status.wip': 'En desarrollo',
+    'projects.soon.title': 'Más proyectos en camino',
+    'projects.soon.text': 'Estoy trabajando en nuevos proyectos. Mientras tanto, revisa mi GitHub.',
+    'contact.title': '¿Construimos algo juntos?',
+    'contact.kicker': '04',
+    'contact.text':
+      'Estoy abierta a oportunidades, colaboraciones o simplemente a platicar de tecnología. Escríbeme y te respondo pronto.',
+    'contact.cta': 'Envíame un correo',
+    'contact.copy': 'Copiar correo',
+    'contact.copied': '¡Copiado!',
+    'footer.made': 'Hecho con Astro y Tailwind CSS',
+    'footer.top': 'Volver arriba',
+    '404.title': 'Página no encontrada',
+    '404.text': 'Parece que esta ruta no existe.',
+    '404.back': 'Volver al inicio',
+  },
+  en: {
+    'meta.title': 'Vanesa — Full Stack Developer',
+    'meta.description':
+      'Portfolio of Vanesa, Full Stack Developer. Projects, tech stack and contact.',
+    'nav.about': 'About',
+    'nav.skills': 'Stack',
+    'nav.projects': 'Projects',
+    'nav.contact': 'Contact',
+    'nav.menu': 'Open menu',
+    'theme.toggle': 'Toggle light/dark theme',
+    'lang.switch': 'Change language',
+    'hero.greeting': "Hi, I'm",
+    'hero.available': 'Available for new projects',
+    'hero.cta.projects': 'View projects',
+    'hero.cta.contact': 'Contact me',
+    'hero.cta.cv': 'Download CV',
+    'about.title': 'About me',
+    'about.kicker': '01',
+    'skills.title': 'Tech stack',
+    'skills.kicker': '02',
+    'skills.subtitle': 'The tools I use to build end to end.',
+    'projects.title': 'Projects',
+    'projects.kicker': '03',
+    'projects.subtitle': "A selection of things I've built.",
+    'projects.demo': 'Live demo',
+    'projects.code': 'Code',
+    'projects.status.live': 'Live',
+    'projects.status.wip': 'In progress',
+    'projects.soon.title': 'More projects coming soon',
+    'projects.soon.text': "I'm working on new projects. Meanwhile, check out my GitHub.",
+    'contact.title': "Let's build something together",
+    'contact.kicker': '04',
+    'contact.text':
+      "I'm open to opportunities, collaborations, or just chatting about tech. Drop me a line and I'll get back to you soon.",
+    'contact.cta': 'Send me an email',
+    'contact.copy': 'Copy email',
+    'contact.copied': 'Copied!',
+    'footer.made': 'Built with Astro & Tailwind CSS',
+    'footer.top': 'Back to top',
+    '404.title': 'Page not found',
+    '404.text': "Looks like this route doesn't exist.",
+    '404.back': 'Back home',
+  },
+} as const satisfies Record<Lang, Record<string, string>>;
+
+export type UIKey = keyof (typeof ui)['es'];

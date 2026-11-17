@@ -1,0 +1,129 @@
+---
+import { getRelativeLocaleUrl } from 'astro:i18n';
+import Icon from './Icon.astro';
+import { getLang, useTranslations } from '../i18n/utils';
+import { profile } from '../data/profile';
+
+const lang = getLang(Astro.currentLocale);
+const t = useTranslations(lang);
+const otherLang = lang === 'es' ? 'en' : 'es';
+const home = getRelativeLocaleUrl(lang, '');
+
+const links = [
+  { href: '#about', label: t('nav.about') },
+  { href: '#skills', label: t('nav.skills') },
+  { href: '#projects', label: t('nav.projects') },
+  { href: '#contact', label: t('nav.contact') },
+];
+---
+
+<header
+  id="site-header"
+  class="fixed inset-x-0 top-0 z-50 border-b border-transparent transition-[background-color,border-color,backdrop-filter] duration-300 data-[scrolled]:border-border data-[scrolled]:bg-bg/75 data-[scrolled]:backdrop-blur-xl"
+>
+  <nav class="container-page flex h-16 items-center justify-between" aria-label="Principal">
+    <a
+      href={home}
+      class="group flex items-center gap-2 font-mono text-sm font-semibold tracking-tight"
+      aria-label={profile.name}
+    >
+      <span
+        class="grid size-9 place-items-center rounded-lg border border-border bg-surface text-accent transition-colors group-hover:border-accent"
+      >
+        {profile.initials}
+      </span>
+    </a>
+
+    <ul class="hidden items-center gap-1 md:flex">
+      {
+        links.map((link) => (
+          <li>
+            <a
+              href={link.href}
+              class="rounded-md px-3 py-2 text-sm text-muted transition-colors hover:text-text"
+            >
+              {link.label}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+
+    <div class="flex items-center gap-1">
+      <a
+        href={getRelativeLocaleUrl(otherLang, '')}
+        hreflang={otherLang}
+        class="flex h-9 items-center gap-1.5 rounded-md px-2.5 font-mono text-xs font-medium text-muted uppercase transition-colors hover:text-text"
+        aria-label={t('lang.switch')}
+        title={t('lang.switch')}
+      >
+        <Icon name="globe" size={16} />
+        {otherLang}
+      </a>
+      <button
+        id="theme-toggle"
+        type="button"
+        class="grid size-9 place-items-center rounded-md text-muted transition-colors hover:text-text"
+        aria-label={t('theme.toggle')}
+        title={t('theme.toggle')}
+      >
+        <Icon name="sun" size={18} class="hidden dark:block" />
+        <Icon name="moon" size={18} class="block dark:hidden" />
+      </button>
+      <button
+        id="menu-toggle"
+        type="button"
+        class="grid size-9 place-items-center rounded-md text-muted transition-colors hover:text-text md:hidden"
+        aria-label={t('nav.menu')}
+        aria-expanded="false"
+        aria-controls="mobile-menu"
+      >
+        <Icon name="menu" size={20} class="menu-open" />
+        <Icon name="close" size={20} class="menu-close hidden" />
+      </button>
+    </div>
+  </nav>
+
+  <div id="mobile-menu" class="hidden border-t border-border bg-bg/95 backdrop-blur-xl md:hidden">
+    <ul class="container-page flex flex-col py-3">
+      {
+        links.map((link) => (
+          <li>
+            <a href={link.href} class="block rounded-md px-2 py-3 text-base text-muted hover:text-text">
+              {link.label}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</header>
+
+<script>
+  const header = document.getElementById('site-header')!;
+  const onScroll = () => header.toggleAttribute('data-scrolled', window.scrollY > 8);
+  onScroll();
+  window.addEventListener('scroll', onScroll, { passive: true });
+
+  // Tema claro/oscuro
+  document.getElementById('theme-toggle')?.addEventListener('click', () => {
+    const next = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
+    document.documentElement.dataset.theme = next;
+    try {
+      localStorage.setItem('theme', next);
+    } catch {}
+  });
+
+  // Menú móvil
+  const toggle = document.getElementById('menu-toggle')!;
+  const menu = document.getElementById('mobile-menu')!;
+  const setOpen = (open: boolean) => {
+    toggle.setAttribute('aria-expanded', String(open));
+    menu.classList.toggle('hidden', !open);
+    toggle.querySelector('.menu-open')?.classList.toggle('hidden', open);
+    toggle.querySelector('.menu-close')?.classList.toggle('hidden', !open);
+    header.toggleAttribute('data-scrolled', open || window.scrollY > 8);
+  };
+  toggle.addEventListener('click', () => setOpen(toggle.getAttribute('aria-expanded') !== 'true'));
+  menu.querySelectorAll('a').forEach((a) => a.addEventListener('click', () => setOpen(false)));
+</script>

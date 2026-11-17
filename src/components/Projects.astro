@@ -1,0 +1,43 @@
+---
+import Icon from './Icon.astro';
+import ProjectCard from './ProjectCard.astro';
+import SectionHeading from './SectionHeading.astro';
+import { getLang, useTranslations } from '../i18n/utils';
+import { projects } from '../data/projects';
+import { profile } from '../data/profile';
+
+const lang = getLang(Astro.currentLocale);
+const t = useTranslations(lang);
+// Con pocos proyectos mostramos una tarjeta "próximamente" para que la sección no se vea vacía
+const showComingSoon = projects.length < 3;
+---
+
+<section id="projects" class="py-16 md:py-24">
+  <div class="container-page">
+    <SectionHeading kicker={t('projects.kicker')} title={t('projects.title')} subtitle={t('projects.subtitle')} />
+    <div class="grid gap-6 md:grid-cols-2">
+      {projects.map((project, index) => <ProjectCard project={project} index={index} />)}
+      {
+        showComingSoon && (
+          <a
+            href={profile.socials.github}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="reveal group flex flex-col items-center justify-center gap-3 rounded-2xl border border-dashed border-border p-10 text-center transition-colors hover:border-accent/60 md:col-span-2"
+          >
+            <span class="grid size-12 place-items-center rounded-full bg-surface-2 text-accent">
+              <Icon name="sparkles" size={22} />
+            </span>
+            <h3 class="font-semibold">{t('projects.soon.title')}</h3>
+            <p class="max-w-md text-sm text-muted">{t('projects.soon.text')}</p>
+            <span class="mt-1 inline-flex items-center gap-1.5 font-mono text-sm text-accent">
+              <Icon name="github" size={16} />
+              github.com/vanesaghdez1
+              <Icon name="arrowRight" size={14} class="transition-transform group-hover:translate-x-0.5" />
+            </span>
+          </a>
+        )
+      }
+    </div>
+  </div>
+</section>

@@ -1,0 +1,112 @@
+---
+import { Image } from 'astro:assets';
+import Icon from './Icon.astro';
+import { getLang, l, useTranslations } from '../i18n/utils';
+import type { Project } from '../data/projects';
+
+interface Props {
+  project: Project;
+  index: number;
+}
+
+const { project, index } = Astro.props;
+const lang = getLang(Astro.currentLocale);
+const t = useTranslations(lang);
+const isLive = project.status === 'live';
+---
+
+<article
+  class:list={[
+    'reveal group relative flex flex-col overflow-hidden rounded-2xl border border-border bg-surface transition-[border-color,transform] duration-300 hover:-translate-y-1 hover:border-accent/60',
+    project.featured && 'md:col-span-2 md:flex-row',
+  ]}
+  style={`transition-delay: ${(index % 3) * 70}ms`}
+>
+  <!-- Portada -->
+  <div
+    class:list={[
+      'relative aspect-[16/10] overflow-hidden border-border bg-surface-2',
+      project.featured ? 'border-b md:aspect-auto md:w-[55%] md:border-r md:border-b-0' : 'border-b',
+    ]}
+  >
+    {
+      project.image ? (
+        <Image
+          src={project.image}
+          alt={project.title}
+          widths={[480, 800, 1200]}
+          sizes="(min-width: 768px) 50vw, 100vw"
+          class="size-full object-cover object-top transition-transform duration-500 group-hover:scale-[1.03]"
+        />
+      ) : (
+        <div class="absolute inset-0 grid place-items-center" aria-hidden="true">
+          <div class="bg-grid absolute inset-0 opacity-70" />
+          <div
+            class="absolute inset-0 opacity-40 transition-opacity duration-500 group-hover:opacity-70"
+            style="background: radial-gradient(circle at 30% 20%, var(--accent), transparent 55%), radial-gradient(circle at 80% 90%, var(--accent-2), transparent 50%);"
+          />
+          <span class="relative font-mono text-5xl font-bold tracking-tighter text-text/80 md:text-6xl">
+            {project.title
+              .split(/\s+/)
+              .map((w) => w[0])
+              .join('')
+              .slice(0, 3)}
+          </span>
+        </div>
+      )
+    }
+  </div>
+
+  <!-- Contenido -->
+  <div class="flex flex-1 flex-col p-6 md:p-7">
+    <div class="mb-3 flex items-center justify-between gap-3">
+      <h3 class="text-xl font-semibold tracking-tight">{project.title}</h3>
+      <span
+        class:list={[
+          'inline-flex shrink-0 items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-xs font-medium',
+          isLive
+            ? 'border-emerald-500/30 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400'
+            : 'border-amber-500/30 bg-amber-500/10 text-amber-600 dark:text-amber-400',
+        ]}
+      >
+        <span class:list={['size-1.5 rounded-full', isLive ? 'bg-emerald-500' : 'bg-amber-500']}></span>
+        {isLive ? t('projects.status.live') : t('projects.status.wip')}
+      </span>
+    </div>
+
+    <p class="leading-relaxed text-pretty text-muted">{l(project.description, lang)}</p>
+
+    <ul class="mt-5 flex flex-wrap gap-2">
+      {project.tech.map((tech) => <li class="rounded-md bg-surface-2 px-2.5 py-1 font-mono text-xs text-muted">{tech}</li>)}
+    </ul>
+
+    {
+      (project.demoUrl || project.repoUrl) && (
+        <div class="mt-auto flex flex-wrap gap-3 pt-6">
+          {project.demoUrl && (
+            <a
+              href={project.demoUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="inline-flex items-center gap-2 rounded-lg bg-text px-4 py-2 text-sm font-semibold text-bg transition hover:opacity-90"
+            >
+              <Icon name="external" size={15} />
+              {t('projects.demo')}
+            </a>
+          )}
+          {project.repoUrl && (
+            <a
+              href={project.repoUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="inline-flex items-center gap-2 rounded-lg border border-border px-4 py-2 text-sm font-semibold transition hover:border-accent"
+            >
+              <Icon name="github" size={15} />
+              {t('projects.code')}
+            </a>
+          )}
+        </div>
+      )
+    }
+  </div>
+</article>

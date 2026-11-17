@@ -1,0 +1,125 @@
+---
+import Icon from './Icon.astro';
+import { getLang, l, useTranslations } from '../i18n/utils';
+import { profile } from '../data/profile';
+import { skillGroups } from '../data/skills';
+
+const lang = getLang(Astro.currentLocale);
+const t = useTranslations(lang);
+const stack = skillGroups.flatMap((g) => g.items).slice(0, 4);
+---
+
+<section class="relative isolate overflow-hidden pt-32 pb-20 md:pt-44 md:pb-32">
+  <!-- Fondo decorativo -->
+  <div class="bg-grid pointer-events-none absolute inset-0 -z-10 opacity-60"></div>
+  <div
+    class="pointer-events-none absolute -top-40 left-1/2 -z-10 h-[32rem] w-[56rem] -translate-x-1/2 rounded-full blur-3xl"
+    style="background: radial-gradient(closest-side, var(--glow), transparent);"
+  >
+  </div>
+
+  <div class="container-page grid items-center gap-14 lg:grid-cols-[1.15fr_1fr]">
+    <div>
+      {
+        profile.available && (
+          <p class="reveal mb-6 inline-flex items-center gap-2 rounded-full border border-border bg-surface/70 px-3 py-1 text-xs font-medium text-muted backdrop-blur">
+            <span class="relative flex size-2">
+              <span class="absolute inline-flex size-full animate-ping rounded-full bg-emerald-400 opacity-75" />
+              <span class="relative inline-flex size-2 rounded-full bg-emerald-500" />
+            </span>
+            {t('hero.available')}
+          </p>
+        )
+      }
+
+      <h1 class="reveal text-4xl font-bold tracking-tight text-balance sm:text-5xl md:text-6xl">
+        <span class="block text-lg font-medium text-muted sm:text-xl">{t('hero.greeting')}</span>
+        <span class="mt-2 block">{profile.name}</span>
+        <span class="text-gradient mt-1 block">{l(profile.role, lang)}</span>
+      </h1>
+
+      <p class="reveal mt-6 max-w-xl text-lg leading-relaxed text-pretty text-muted">
+        {l(profile.tagline, lang)}
+      </p>
+
+      <div class="reveal mt-9 flex flex-wrap items-center gap-3">
+        <a
+          href="#projects"
+          class="group inline-flex items-center gap-2 rounded-lg bg-text px-5 py-3 text-sm font-semibold text-bg transition hover:opacity-90"
+        >
+          {t('hero.cta.projects')}
+          <Icon name="arrowRight" size={16} class="transition-transform group-hover:translate-x-0.5" />
+        </a>
+        <a
+          href="#contact"
+          class="inline-flex items-center gap-2 rounded-lg border border-border bg-surface px-5 py-3 text-sm font-semibold transition hover:border-accent"
+        >
+          {t('hero.cta.contact')}
+        </a>
+        {
+          profile.cvUrl && (
+            <a
+              href={profile.cvUrl}
+              download
+              class="inline-flex items-center gap-2 rounded-lg px-4 py-3 text-sm font-semibold text-muted transition hover:text-text"
+            >
+              <Icon name="download" size={16} />
+              {t('hero.cta.cv')}
+            </a>
+          )
+        }
+      </div>
+
+      <div class="reveal mt-10 flex items-center gap-5 text-muted">
+        {
+          profile.socials.github && (
+            <a href={profile.socials.github} target="_blank" rel="noopener noreferrer" class="transition hover:text-text" aria-label="GitHub">
+              <Icon name="github" size={22} />
+            </a>
+          )
+        }
+        {
+          profile.socials.linkedin && (
+            <a href={profile.socials.linkedin} target="_blank" rel="noopener noreferrer" class="transition hover:text-text" aria-label="LinkedIn">
+              <Icon name="linkedin" size={22} />
+            </a>
+          )
+        }
+        <a href={`mailto:${profile.email}`} class="transition hover:text-text" aria-label="Email">
+          <Icon name="mail" size={22} />
+        </a>
+        <span class="h-px w-10 bg-border"></span>
+        <span class="inline-flex items-center gap-1.5 text-sm">
+          <Icon name="mapPin" size={16} />
+          {l(profile.location, lang)}
+        </span>
+      </div>
+    </div>
+
+    <!-- Tarjeta tipo editor de código -->
+    <div class="reveal relative hidden sm:block" aria-hidden="true">
+      <div
+        class="absolute -inset-px rounded-2xl opacity-70 blur-sm"
+        style="background: linear-gradient(135deg, var(--accent), transparent 40%, transparent 60%, var(--accent-2));"
+      >
+      </div>
+      <div class="relative overflow-hidden rounded-2xl border border-border bg-surface shadow-2xl shadow-black/20">
+        <div class="flex items-center gap-2 border-b border-border px-4 py-3">
+          <span class="size-3 rounded-full bg-[#ff5f57]"></span>
+          <span class="size-3 rounded-full bg-[#febc2e]"></span>
+          <span class="size-3 rounded-full bg-[#28c840]"></span>
+          <span class="ml-3 font-mono text-xs text-muted">developer.ts</span>
+        </div>
+        <pre class="overflow-x-auto p-5 font-mono text-[13px] leading-7"><code><span class="text-accent">const</span> <span class="text-accent-2">developer</span> = {'{'}
+  name: <span class="text-emerald-500">'{profile.name}'</span>,
+  role: <span class="text-emerald-500">'{l(profile.role, lang)}'</span>,
+  stack: [{stack.map((s, i) => (<><span class="text-emerald-500">'{s}'</span>{i < stack.length - 1 ? ', ' : ''}</>))}],
+  coffee: <span class="text-amber-500">true</span>,
+  {lang === 'es' ? 'aprendiendo' : 'learning'}: <span class="text-amber-500">Infinity</span>,
+{'}'};
+
+<span class="text-accent">export default</span> developer;<span class="ml-0.5 inline-block h-4 w-2 translate-y-0.5 animate-pulse bg-accent"></span></code></pre>
+      </div>
+    </div>
+  </div>
+</section>
