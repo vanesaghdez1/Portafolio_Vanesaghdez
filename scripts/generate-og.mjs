@@ -3,8 +3,8 @@
 import sharp from 'sharp';
 import { fileURLToPath } from 'node:url';
 
-const name = 'Vanesa'; // TODO: igual que profile.name
-const role = 'Full Stack Developer';
+const name = 'Vanesa González'; // igual que profile.shortName
+const role = 'Full Stack Software Engineer';
 const url = 'vanesaghdez.vercel.app';
 
 const svg = `

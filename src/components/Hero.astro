@@ -1,15 +1,15 @@
 ---
+import { getRelativeLocaleUrl } from 'astro:i18n';
 import Icon from './Icon.astro';
 import { getLang, l, useTranslations } from '../i18n/utils';
 import { profile } from '../data/profile';
-import { skillGroups } from '../data/skills';
 
 const lang = getLang(Astro.currentLocale);
 const t = useTranslations(lang);
-const stack = skillGroups.flatMap((g) => g.items).slice(0, 4);
+const stack = profile.heroStack;
 ---
 
-<section class="relative isolate overflow-hidden pt-32 pb-20 md:pt-44 md:pb-32">
+<section class="relative isolate overflow-hidden pt-32 pb-16 md:pt-44 md:pb-24">
   <!-- Fondo decorativo -->
   <div class="bg-grid pointer-events-none absolute inset-0 -z-10 opacity-60"></div>
   <div
@@ -34,7 +34,7 @@ const stack = skillGroups.flatMap((g) => g.items).slice(0, 4);
 
       <h1 class="reveal text-4xl font-bold tracking-tight text-balance sm:text-5xl md:text-6xl">
         <span class="block text-lg font-medium text-muted sm:text-xl">{t('hero.greeting')}</span>
-        <span class="mt-2 block">{profile.name}</span>
+        <span class="mt-2 block">{profile.shortName}</span>
         <span class="text-gradient mt-1 block">{l(profile.role, lang)}</span>
       </h1>
 
@@ -51,26 +51,21 @@ const stack = skillGroups.flatMap((g) => g.items).slice(0, 4);
           <Icon name="arrowRight" size={16} class="transition-transform group-hover:translate-x-0.5" />
         </a>
         <a
-          href="#contact"
+          href={getRelativeLocaleUrl(lang, 'cv')}
           class="inline-flex items-center gap-2 rounded-lg border border-border bg-surface px-5 py-3 text-sm font-semibold transition hover:border-accent"
+        >
+          <Icon name="fileText" size={16} />
+          {t('hero.cta.cv')}
+        </a>
+        <a
+          href="#contact"
+          class="inline-flex items-center gap-2 rounded-lg px-4 py-3 text-sm font-semibold text-muted transition hover:text-text"
         >
           {t('hero.cta.contact')}
         </a>
-        {
-          profile.cvUrl && (
-            <a
-              href={profile.cvUrl}
-              download
-              class="inline-flex items-center gap-2 rounded-lg px-4 py-3 text-sm font-semibold text-muted transition hover:text-text"
-            >
-              <Icon name="download" size={16} />
-              {t('hero.cta.cv')}
-            </a>
-          )
-        }
       </div>
 
-      <div class="reveal mt-10 flex items-center gap-5 text-muted">
+      <div class="reveal mt-10 flex flex-wrap items-center gap-5 text-muted">
         {
           profile.socials.github && (
             <a href={profile.socials.github} target="_blank" rel="noopener noreferrer" class="transition hover:text-text" aria-label="GitHub">
@@ -111,11 +106,11 @@ const stack = skillGroups.flatMap((g) => g.items).slice(0, 4);
           <span class="ml-3 font-mono text-xs text-muted">developer.ts</span>
         </div>
         <pre class="overflow-x-auto p-5 font-mono text-[13px] leading-7"><code><span class="text-accent">const</span> <span class="text-accent-2">developer</span> = {'{'}
-  name: <span class="text-emerald-500">'{profile.name}'</span>,
-  role: <span class="text-emerald-500">'{l(profile.role, lang)}'</span>,
+  name: <span class="text-emerald-500">'{profile.shortName}'</span>,
+  role: <span class="text-emerald-500">'Full Stack'</span>,
   stack: [{stack.map((s, i) => (<><span class="text-emerald-500">'{s}'</span>{i < stack.length - 1 ? ', ' : ''}</>))}],
+  {lang === 'es' ? 'aprendiendo' : 'learning'}: <span class="text-emerald-500">'{profile.learning}'</span>,
   coffee: <span class="text-amber-500">true</span>,
-  {lang === 'es' ? 'aprendiendo' : 'learning'}: <span class="text-amber-500">Infinity</span>,
 {'}'};
 
 <span class="text-accent">export default</span> developer;<span class="ml-0.5 inline-block h-4 w-2 translate-y-0.5 animate-pulse bg-accent"></span></code></pre>

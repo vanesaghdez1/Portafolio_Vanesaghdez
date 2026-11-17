@@ -121,3 +121,29 @@
     animation-iteration-count: 1 !important;
   }
 }
+
+/* ---------- Impresión: siempre claro y sin elementos de navegación ---------- */
+@media print {
+  :root,
+  [data-theme='dark'] {
+    --bg: #ffffff;
+    --surface: #ffffff;
+    --surface-2: #f3f4f6;
+    --border: #d4d7e0;
+    --text: #111318;
+    --muted: #3d4252;
+    --accent: #23374b;
+    --accent-2: #23374b;
+    color-scheme: light;
+  }
+  [data-print-hide] {
+    display: none !important;
+  }
+  .reveal {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+  a {
+    text-decoration: none;
+  }
+}
