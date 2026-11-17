@@ -43,7 +43,7 @@ const jsonLd = {
 ---
 
 <!doctype html>
-<html lang={lang} data-theme="dark">
+<html lang={lang} data-theme="light">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -60,7 +60,7 @@ const jsonLd = {
     <link rel="alternate" hreflang="x-default" href={getAbsoluteLocaleUrl('es', '')} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="sitemap" href="/sitemap-index.xml" />
-    <meta name="theme-color" content="#08090e" />
+    <meta name="theme-color" content="#f6f9fc" />
 
     <!-- Open Graph / redes sociales -->
     <meta property="og:type" content="website" />
@@ -79,8 +79,8 @@ const jsonLd = {
     <!-- Aplica el tema antes de pintar para evitar parpadeo -->
     <script is:inline>
       (() => {
-        // Oscuro por defecto; el claro solo si el visitante lo eligió con el botón
-        let theme = 'dark';
+        // Claro por defecto; el oscuro solo si el visitante lo eligió con el botón
+        let theme = 'light';
         try {
           const stored = localStorage.getItem('theme');
           if (stored === 'light' || stored === 'dark') theme = stored;

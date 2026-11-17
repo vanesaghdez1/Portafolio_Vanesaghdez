@@ -32,10 +32,8 @@ export const profile = {
     github: 'https://github.com/vanesaghdez1',
     linkedin: 'https://www.linkedin.com/in/gonz%C3%A1lez-hern%C3%A1ndez-vanesa-a49451304',
   },
-  /** Tecnologías que aparecen en la tarjeta de código del inicio. */
-  heroStack: ['C#', '.NET', 'Vue.js', 'AWS'],
-  /** Lo que estás aprendiendo ahora (tarjeta de código del inicio). */
-  learning: 'AWS Solutions Architect',
+  /** Tecnologías principales que aparecen en el panel del inicio. */
+  heroStack: ['C#', '.NET', 'Vue.js', 'SQL Server', 'AWS'],
   /** Párrafos de "Sobre mí" (también es el Perfil Profesional de /cv). */
   about: [
     {

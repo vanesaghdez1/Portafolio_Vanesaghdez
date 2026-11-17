@@ -5,28 +5,30 @@
 
 /* ---------- Tokens de color ---------- */
 :root {
-  --bg: #f7f7fb;
+  /* Claro (por defecto): blanco con tinte azul, texto azul marino, acentos azul acero / azul claro */
+  --bg: #f6f9fc;
   --surface: #ffffff;
-  --surface-2: #eef0f6;
-  --border: #e2e4ee;
-  --text: #12131a;
-  --muted: #5b6078;
-  --accent: #7c3aed;
-  --accent-2: #0891b2;
-  --glow: rgb(124 58 237 / 0.18);
+  --surface-2: #edf3f9;
+  --border: #d9e3ee;
+  --text: #0f2236;
+  --muted: #4b5d72;
+  --accent: #2b6cb0;
+  --accent-2: #8ec1ea;
+  --accent-soft: #e2eef9;
   color-scheme: light;
 }
 
 [data-theme='dark'] {
-  --bg: #08090e;
-  --surface: #10121a;
-  --surface-2: #171a25;
-  --border: #232738;
-  --text: #ecedf3;
-  --muted: #9097b0;
-  --accent: #a78bfa;
-  --accent-2: #22d3ee;
-  --glow: rgb(167 139 250 / 0.22);
+  /* Oscuro: azul marino */
+  --bg: #0b1724;
+  --surface: #0f1f30;
+  --surface-2: #152a40;
+  --border: #213a54;
+  --text: #e7eef6;
+  --muted: #9db1c6;
+  --accent: #8ec5f0;
+  --accent-2: #4f93d1;
+  --accent-soft: #15304b;
   color-scheme: dark;
 }
 
@@ -39,6 +41,7 @@
   --color-muted: var(--muted);
   --color-accent: var(--accent);
   --color-accent-2: var(--accent-2);
+  --color-accent-soft: var(--accent-soft);
   --font-sans: 'Inter Variable', ui-sans-serif, system-ui, sans-serif;
   --font-mono: 'JetBrains Mono Variable', ui-monospace, monospace;
 }
@@ -67,21 +70,6 @@
 }
 
 /* ---------- Utilidades propias ---------- */
-@utility text-gradient {
-  background: linear-gradient(100deg, var(--accent), var(--accent-2));
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-}
-
-@utility bg-grid {
-  background-image:
-    linear-gradient(to right, var(--border) 1px, transparent 1px),
-    linear-gradient(to bottom, var(--border) 1px, transparent 1px);
-  background-size: 48px 48px;
-  mask-image: radial-gradient(ellipse 70% 60% at 50% 0%, #000 40%, transparent 100%);
-}
-
 @utility container-page {
   width: 100%;
   max-width: 72rem;
@@ -134,6 +122,7 @@
     --muted: #3d4252;
     --accent: #23374b;
     --accent-2: #23374b;
+    --accent-soft: #eef2f6;
     color-scheme: light;
   }
   [data-print-hide] {

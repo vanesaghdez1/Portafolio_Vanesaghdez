@@ -19,7 +19,7 @@ const t = useTranslations(lang);
           profile.highlights.map((h) => (
             <div class="flex flex-col-reverse rounded-xl border border-border bg-surface p-4 md:p-5">
               <dt class="mt-1 text-xs text-muted md:text-sm">{l(h.label, lang)}</dt>
-              <dd class="text-gradient text-2xl font-bold md:text-3xl">{h.value}</dd>
+              <dd class="text-accent text-2xl font-bold md:text-3xl">{h.value}</dd>
             </div>
           ))
         }

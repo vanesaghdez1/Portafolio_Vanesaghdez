@@ -43,7 +43,7 @@ const initials = title
 
 <article
   class:list={[
-    'reveal group relative flex flex-col overflow-hidden rounded-2xl border border-border bg-surface transition-[border-color,transform] duration-300 hover:-translate-y-1 hover:border-accent/60',
+    'reveal group relative flex flex-col overflow-hidden rounded-2xl border border-border bg-surface transition-colors duration-300 hover:border-accent/60',
     project.featured && 'md:col-span-2 md:flex-row',
   ]}
   style={`transition-delay: ${(index % 3) * 70}ms`}
@@ -65,13 +65,12 @@ const initials = title
           class="size-full object-cover object-top transition-transform duration-500 group-hover:scale-[1.03]"
         />
       ) : (
-        <div class="absolute inset-0 grid place-items-center" aria-hidden="true">
-          <div class="bg-grid absolute inset-0 opacity-70" />
-          <div
-            class="absolute inset-0 opacity-40 transition-opacity duration-500 group-hover:opacity-70"
-            style="background: radial-gradient(circle at 30% 20%, var(--accent), transparent 55%), radial-gradient(circle at 80% 90%, var(--accent-2), transparent 50%);"
-          />
-          <span class="relative font-mono text-5xl font-bold tracking-tighter text-text/80 md:text-6xl">{initials}</span>
+        <div
+          class="absolute inset-0 grid place-items-center"
+          style="background: linear-gradient(135deg, var(--accent-soft), var(--surface-2));"
+          aria-hidden="true"
+        >
+          <span class="font-mono text-4xl font-semibold tracking-tight text-accent md:text-5xl">{initials}</span>
         </div>
       )
     }
