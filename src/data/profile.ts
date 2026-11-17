@@ -1,46 +1,56 @@
 import type { Localized } from '../i18n/ui';
 
 /**
- * ✏️ Tus datos personales. Todo lo marcado con TODO es un placeholder.
+ * ✏️ Tus datos personales. Se usan en el inicio, en /cv y en el SEO.
  */
 export const profile = {
-  name: 'Vanesa', // TODO: nombre como quieres que aparezca (p. ej. "Vanesa González")
-  initials: 'VG', // TODO: se usa en el logo del header
+  name: 'Vanesa González Hernández',
+  /** Versión corta para el inicio y el footer. */
+  shortName: 'Vanesa González',
+  initials: 'VG',
   role: {
-    es: 'Full Stack Developer',
-    en: 'Full Stack Developer',
+    es: 'Full Stack Software Engineer',
+    en: 'Full Stack Software Engineer',
   } satisfies Localized,
   tagline: {
-    es: 'Construyo aplicaciones web completas: interfaces cuidadas, APIs sólidas y bases de datos bien diseñadas.',
-    en: 'I build complete web applications: polished interfaces, solid APIs and well-designed databases.',
+    es: 'Desarrollo aplicaciones web y empresariales con C#, .NET y Vue.js: desde el levantamiento de requerimientos con el cliente hasta la solución funcionando.',
+    en: 'I build web and enterprise applications with C#, .NET and Vue.js: from gathering requirements with the client to a working solution.',
   } satisfies Localized,
   location: {
-    es: 'México', // TODO
-    en: 'Mexico',
+    es: 'Ciudad de México',
+    en: 'Mexico City',
   } satisfies Localized,
-  available: true, // muestra el badge "Disponible para nuevos proyectos"
-  email: 'tu-correo@ejemplo.com', // TODO
-  /** Ruta a tu CV dentro de /public (p. ej. '/cv-vanesa.pdf'). Vacío = se oculta el botón. */
-  cvUrl: '',
+  /** Muestra el badge "Abierta a nuevas oportunidades". */
+  available: true,
+  email: 'vanesaghdez@gmail.com',
+  /**
+   * Teléfono: vacío a propósito para que no quede público (spam/bots).
+   * Si lo quieres en /cv, escríbelo aquí, p. ej. '55 1234 5678'.
+   */
+  phone: '',
   socials: {
     github: 'https://github.com/vanesaghdez1',
-    linkedin: '', // TODO: 'https://www.linkedin.com/in/tu-usuario'
+    linkedin: 'https://www.linkedin.com/in/gonz%C3%A1lez-hern%C3%A1ndez-vanesa-a49451304',
   },
-  /** Párrafos de "Sobre mí". */
+  /** Tecnologías que aparecen en la tarjeta de código del inicio. */
+  heroStack: ['C#', '.NET', 'Vue.js', 'AWS'],
+  /** Lo que estás aprendiendo ahora (tarjeta de código del inicio). */
+  learning: 'AWS Solutions Architect',
+  /** Párrafos de "Sobre mí" (también es el Perfil Profesional de /cv). */
   about: [
     {
-      es: 'Soy desarrolladora Full Stack. Disfruto llevar una idea desde el diseño de la base de datos hasta una interfaz que la gente quiera usar.',
-      en: 'I am a Full Stack developer. I enjoy taking an idea all the way from database design to an interface people actually want to use.',
+      es: 'Ingeniera en Computación por el IPN con experiencia en desarrollo de software Full Stack, análisis de requerimientos e implementación de soluciones tecnológicas empresariales.',
+      en: 'Computer Engineer from IPN with experience in Full Stack software development, requirements analysis and implementing enterprise technology solutions.',
     },
     {
-      es: 'Me importa el código limpio, el rendimiento y los detalles de experiencia de usuario. Siempre estoy aprendiendo algo nuevo y aplicándolo en proyectos reales.',
-      en: 'I care about clean code, performance and the small UX details. I am always learning something new and applying it to real projects.',
+      es: 'He participado en el desarrollo de aplicaciones web y empresariales con C#, .NET y JavaScript, así como en proyectos con Vue.js e integración de servicios cloud. Tengo experiencia en comunicación directa con clientes, conducción de reuniones y en convertir necesidades de negocio en soluciones técnicas.',
+      en: 'I have worked on web and enterprise applications using C#, .NET and JavaScript, as well as projects with Vue.js and cloud service integration. I am experienced in working directly with clients, leading meetings and turning business needs into technical solutions.',
     },
   ] satisfies Localized[],
-  /** Datos rápidos que aparecen junto a "Sobre mí". */
+  /** Datos rápidos junto a "Sobre mí". */
   highlights: [
-    { value: '+3', label: { es: 'años programando', en: 'years coding' } }, // TODO
-    { value: 'Full', label: { es: 'stack, de la BD a la UI', en: 'stack, DB to UI' } },
-    { value: 'ES/EN', label: { es: 'idiomas', en: 'languages' } },
+    { value: '2+', label: { es: 'años de experiencia', en: 'years of experience' } },
+    { value: 'IPN', label: { es: 'Ing. en Computación', en: 'Computer Engineering' } },
+    { value: 'B2', label: { es: 'nivel de inglés', en: 'English level' } },
   ] satisfies { value: string; label: Localized }[],
 };

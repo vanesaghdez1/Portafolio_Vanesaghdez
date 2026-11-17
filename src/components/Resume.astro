@@ -1,0 +1,274 @@
+---
+/**
+ * CV dinámico: se genera con los mismos datos de /src/data que el portafolio.
+ * Se ve como "hoja" en pantalla y se imprime limpio (A4) con "Guardar como PDF".
+ */
+import { getRelativeLocaleUrl } from 'astro:i18n';
+import Layout from '../layouts/Layout.astro';
+import Header from './Header.astro';
+import Icon from './Icon.astro';
+import { getLang, l, useTranslations } from '../i18n/utils';
+import { profile } from '../data/profile';
+import { fundamentals, skillGroups } from '../data/skills';
+import { projects } from '../data/projects';
+import { certifications, education, experience, languagesSpoken, softSkills } from '../data/resume';
+
+const lang = getLang(Astro.currentLocale);
+const t = useTranslations(lang);
+const cvProjects = projects.filter((p) => p.highlights?.length);
+---
+
+<Layout title={t('meta.cv.title')} description={t('meta.cv.description')}>
+  <Header path="cv" />
+
+  <main class="cv-main pt-24 pb-16 md:pt-28">
+    <div class="container-page max-w-4xl">
+      <!-- Barra de acciones (no se imprime) -->
+      <div data-print-hide class="mb-6 flex flex-wrap items-center justify-between gap-3">
+        <a
+          href={getRelativeLocaleUrl(lang, '')}
+          class="inline-flex items-center gap-2 text-sm text-muted transition hover:text-text"
+        >
+          <Icon name="arrowRight" size={15} class="rotate-180" />
+          {t('cv.back')}
+        </a>
+        <div class="flex items-center gap-3">
+          <span class="hidden text-xs text-muted md:inline">{t('cv.hint')}</span>
+          <button
+            id="print-cv"
+            type="button"
+            class="inline-flex items-center gap-2 rounded-lg bg-text px-4 py-2 text-sm font-semibold text-bg transition hover:opacity-90"
+          >
+            <Icon name="printer" size={16} />
+            {t('cv.print')}
+          </button>
+        </div>
+      </div>
+
+      <!-- Hoja -->
+      <article class="cv-sheet rounded-2xl border border-border bg-surface p-6 shadow-2xl shadow-black/10 sm:p-10 md:p-14">
+        <!-- Encabezado -->
+        <header class="border-b border-border pb-6 text-center">
+          <h1 class="text-3xl font-bold tracking-tight md:text-4xl">{profile.name}</h1>
+          <p class="text-gradient cv-accent mt-1 text-lg font-semibold">{l(profile.role, lang)}</p>
+          <ul class="mt-4 flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-sm text-muted">
+            <li class="inline-flex items-center gap-1.5">
+              <Icon name="mapPin" size={15} />
+              {l(profile.location, lang)}
+            </li>
+            <li>
+              <a href={`mailto:${profile.email}`} class="inline-flex items-center gap-1.5 transition hover:text-accent">
+                <Icon name="mail" size={15} />
+                {profile.email}
+              </a>
+            </li>
+            {
+              profile.phone && (
+                <li class="inline-flex items-center gap-1.5">
+                  <Icon name="phone" size={15} />
+                  {profile.phone}
+                </li>
+              )
+            }
+            {
+              profile.socials.github && (
+                <li>
+                  <a href={profile.socials.github} target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 transition hover:text-accent">
+                    <Icon name="github" size={15} />
+                    {profile.socials.github.replace('https://', '')}
+                  </a>
+                </li>
+              )
+            }
+            {
+              profile.socials.linkedin && (
+                <li>
+                  <a href={profile.socials.linkedin} target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 transition hover:text-accent">
+                    <Icon name="linkedin" size={15} />
+                    LinkedIn
+                  </a>
+                </li>
+              )
+            }
+          </ul>
+        </header>
+
+        <!-- Perfil -->
+        <section class="cv-section">
+          <h2 class="cv-h2">{t('cv.profile')}</h2>
+          <div class="space-y-2 leading-relaxed text-pretty text-muted">
+            {profile.about.map((p) => <p>{l(p, lang)}</p>)}
+          </div>
+        </section>
+
+        <!-- Experiencia -->
+        <section class="cv-section">
+          <h2 class="cv-h2">{t('cv.experience')}</h2>
+          <div class="space-y-6">
+            {
+              experience.map((job) => (
+                <div class="cv-avoid-break">
+                  <div class="flex flex-col justify-between gap-x-4 sm:flex-row sm:items-baseline">
+                    <h3 class="font-semibold">{l(job.role, lang)}</h3>
+                    <p class="shrink-0 font-mono text-xs text-muted">{l(job.period, lang)}</p>
+                  </div>
+                  <p class="cv-accent text-sm text-accent">
+                    {job.company}
+                    {job.location && <span class="text-muted"> — {l(job.location, lang)}</span>}
+                  </p>
+                  <ul class="mt-2 list-disc space-y-1 pl-5 text-sm leading-relaxed text-muted marker:text-accent">
+                    {job.bullets.map((b) => <li>{l(b, lang)}</li>)}
+                  </ul>
+                </div>
+              ))
+            }
+          </div>
+        </section>
+
+        <!-- Habilidades -->
+        <section class="cv-section">
+          <h2 class="cv-h2">{t('cv.skills')}</h2>
+          <dl class="grid gap-x-6 gap-y-2 text-sm sm:grid-cols-[11rem_1fr]">
+            {
+              skillGroups.map((g) => (
+                <>
+                  <dt class="font-semibold">{l(g.title, lang)}</dt>
+                  <dd class="mb-2 text-muted sm:mb-0">{g.items.join(', ')}</dd>
+                </>
+              ))
+            }
+            <dt class="font-semibold">{t('cv.fundamentals')}</dt>
+            <dd class="text-muted">{l(fundamentals, lang)}</dd>
+          </dl>
+        </section>
+
+        <!-- Proyectos -->
+        {
+          cvProjects.length > 0 && (
+            <section class="cv-section">
+              <h2 class="cv-h2">{t('cv.projects')}</h2>
+              <div class="space-y-5">
+                {cvProjects.map((p) => (
+                  <div class="cv-avoid-break">
+                    <h3 class="font-semibold">{l(p.title, lang)}</h3>
+                    <p class="text-sm text-muted italic">{p.tech.join(', ')}</p>
+                    <ul class="mt-1.5 list-disc space-y-1 pl-5 text-sm leading-relaxed text-muted marker:text-accent">
+                      {p.highlights!.map((h) => <li>{l(h, lang)}</li>)}
+                    </ul>
+                  </div>
+                ))}
+              </div>
+            </section>
+          )
+        }
+
+        <!-- Formación -->
+        <section class="cv-section cv-avoid-break">
+          <h2 class="cv-h2">{t('cv.education')}</h2>
+          {
+            education.map((ed) => (
+              <div>
+                <div class="flex flex-col justify-between gap-x-4 sm:flex-row sm:items-baseline">
+                  <h3 class="font-semibold">{l(ed.degree, lang)}</h3>
+                  <p class="shrink-0 font-mono text-xs text-muted">{l(ed.period, lang)}</p>
+                </div>
+                <p class="cv-accent text-sm text-accent">{ed.school}</p>
+                {ed.note && <p class="mt-1 text-sm text-muted">{l(ed.note, lang)}</p>}
+              </div>
+            ))
+          }
+        </section>
+
+        <!-- Certificaciones -->
+        <section class="cv-section cv-avoid-break">
+          <h2 class="cv-h2">{t('education.certs')}</h2>
+          <ul class="list-disc space-y-1 pl-5 text-sm text-muted marker:text-accent">
+            {
+              certifications.map((c) => (
+                <li>
+                  {l(c.name, lang)}
+                  {c.status && <span class="text-muted italic"> — {l(c.status, lang)}</span>}
+                </li>
+              ))
+            }
+          </ul>
+        </section>
+
+        <!-- Competencias + Idiomas -->
+        <div class="cv-avoid-break grid gap-x-10 sm:grid-cols-[1.6fr_1fr]">
+          <section class="cv-section">
+            <h2 class="cv-h2">{t('education.soft')}</h2>
+            <p class="text-sm leading-relaxed text-muted">{softSkills.map((s) => l(s, lang)).join(' · ')}</p>
+          </section>
+          <section class="cv-section">
+            <h2 class="cv-h2">{t('education.languages')}</h2>
+            <ul class="space-y-1 text-sm">
+              {
+                languagesSpoken.map((lng) => (
+                  <li>
+                    <span class="font-semibold">{l(lng.name, lang)}:</span>
+                    <span class="text-muted"> {l(lng.level, lang)}</span>
+                  </li>
+                ))
+              }
+            </ul>
+          </section>
+        </div>
+      </article>
+    </div>
+  </main>
+</Layout>
+
+<script>
+  document.getElementById('print-cv')?.addEventListener('click', () => window.print());
+</script>
+
+<style>
+  .cv-section {
+    margin-top: 1.75rem;
+  }
+  .cv-h2 {
+    margin-bottom: 0.75rem;
+    padding-bottom: 0.35rem;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+
+  /* ---------- Impresión / Guardar como PDF ---------- */
+  @media print {
+    @page {
+      size: A4;
+      margin: 14mm 15mm;
+    }
+    .cv-main {
+      padding: 0 !important;
+    }
+    .cv-main :global(.container-page) {
+      max-width: none;
+      padding: 0;
+    }
+    .cv-sheet {
+      border: 0 !important;
+      border-radius: 0 !important;
+      box-shadow: none !important;
+      padding: 0 !important;
+      font-size: 10.5pt;
+    }
+    .cv-section {
+      margin-top: 1.1rem;
+    }
+    .cv-avoid-break {
+      break-inside: avoid;
+    }
+    /* En papel, el degradado del rol se imprime como color sólido */
+    .cv-accent {
+      background: none !important;
+      color: var(--accent) !important;
+      -webkit-text-fill-color: currentColor;
+    }
+  }
+</style>

@@ -6,6 +6,8 @@ import { getAbsoluteLocaleUrl } from 'astro:i18n';
 import { getLang, useTranslations } from '../i18n/utils';
 import { languages } from '../i18n/ui';
 import { profile } from '../data/profile';
+import { education, experience } from '../data/resume';
+import { skillGroups } from '../data/skills';
 
 interface Props {
   title?: string;
@@ -27,7 +29,16 @@ const jsonLd = {
   name: profile.name,
   jobTitle: profile.role[lang],
   url: Astro.site?.toString(),
+  email: `mailto:${profile.email}`,
+  address: { '@type': 'PostalAddress', addressLocality: 'Ciudad de México', addressCountry: 'MX' },
   sameAs: Object.values(profile.socials).filter(Boolean),
+  worksFor: experience.find((e) => e.current) && {
+    '@type': 'Organization',
+    name: experience.find((e) => e.current)?.company,
+  },
+  alumniOf: education.map((ed) => ({ '@type': 'CollegeOrUniversity', name: ed.school })),
+  knowsAbout: skillGroups.flatMap((g) => g.items),
+  knowsLanguage: ['es', 'en'],
 };
 ---
 
